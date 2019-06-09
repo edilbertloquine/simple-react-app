@@ -1,28 +1,28 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { loginUser } from "../../actions/authActions";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions/authActions';
 
 class Login extends Component {
   state = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     errors: {}
   };
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push('/dashboard');
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push('/dashboard');
     }
 
     if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+      this.setState({ errors: nextProps.errors, password: '' });
     }
   }
 
@@ -45,6 +45,7 @@ class Login extends Component {
 
   render() {
     const { errors } = this.state;
+
     return (
       <div>
         <div className="login">
@@ -67,7 +68,7 @@ class Login extends Component {
                     </div>
                   </div>
                 ) : (
-                  ""
+                  ''
                 )}
 
                 <form onSubmit={this.onSubmit}>
