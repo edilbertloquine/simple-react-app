@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { loginUser } from '../../actions/authActions';
 
 class Login extends Component {
   state = {
@@ -6,6 +9,22 @@ class Login extends Component {
     password: '',
     errors: {}
   };
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+
+    if (nextProps.erros) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
 
   onChange = e => {
     this.setState({
@@ -21,10 +40,12 @@ class Login extends Component {
       password: this.state.password
     };
 
-    console.log(credentials);
+    this.props.loginUser(credentials);
   };
 
   render() {
+    const { errors } = this.state;
+
     return (
       <div>
         <div className="login">
@@ -35,6 +56,15 @@ class Login extends Component {
                 <p className="lead text-center">
                   Sign in to your DevConnector account
                 </p>
+
+                {Object.keys(errors).length > 0 ? (
+                  <div className="row">
+                    <div className="col-md-12 alert alert-danger">error</div>
+                  </div>
+                ) : (
+                  ''
+                )}
+
                 <form onSubmit={this.onSubmit}>
                   <div className="form-group">
                     <input
@@ -70,4 +100,17 @@ class Login extends Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(Login);
