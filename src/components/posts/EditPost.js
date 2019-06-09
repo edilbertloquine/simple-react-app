@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createPost, getPost } from '../../actions/postsActions';
+import { updatePost, getPost } from '../../actions/postsActions';
 
 class CreateForm extends Component {
   state = {
@@ -10,9 +10,25 @@ class CreateForm extends Component {
     errors: {}
   };
 
+  componentDidMount() {
+    this.props.getPost(this.props.match.params.id);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
+    }
+
+    if (nextProps.post.post) {
+      const post = nextProps.post.post;
+
+      post.title = post.title ? post.title : '';
+      post.content = post.content ? post.content : '';
+
+      this.setState({
+        title: post.title,
+        content: post.content
+      });
     }
   }
 
@@ -25,12 +41,12 @@ class CreateForm extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const newPost = {
+    const post = {
       title: this.state.title,
       content: this.state.content
     };
 
-    this.props.createPost(newPost, this.props.history);
+    this.props.updatePost(this.props.match.params.id, post, this.props.history);
   };
 
   render() {
@@ -102,5 +118,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createPost, getPost }
+  { updatePost, getPost }
 )(withRouter(CreateForm));

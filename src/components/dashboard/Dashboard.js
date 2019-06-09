@@ -17,8 +17,7 @@ class Dashboard extends Component {
   };
 
   onDeleteClick = id => {
-    console.log(id);
-    // this.props.deletePost();
+    this.props.deletePost(id);
   };
 
   render() {

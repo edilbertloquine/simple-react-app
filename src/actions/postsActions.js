@@ -16,12 +16,11 @@ export const getPosts = () => dispatch => {
     .catch(err => dispatch({ type: GET_POSTS, payload: {} }));
 };
 
-export const getPost = () => dispatch => {
-  dispatch(setPostsLoading());
+export const getPost = id => dispatch => {
   axios
-    .get('http://localhost:5000/api/posts')
-    .then(res => dispatch({ type: GET_POSTS, payload: res.data }))
-    .catch(err => dispatch({ type: GET_POSTS, payload: {} }));
+    .get(`http://localhost:5000/api/posts/${id}`)
+    .then(res => dispatch({ type: GET_POST, payload: res.data }))
+    .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 };
 
 export const createPost = (newPost, history) => dispatch => {
@@ -31,11 +30,18 @@ export const createPost = (newPost, history) => dispatch => {
     .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 };
 
+export const updatePost = (id, post, history) => dispatch => {
+  axios
+    .put(`http://localhost:5000/api/posts/${id}`, post)
+    .then(res => history.push('/dashboard'))
+    .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
+};
+
 export const deletePost = id => dispatch => {
   if (window.confirm('Are you sure')) {
     axios
       .delete(`http://localhost:5000/api/posts/${id}`)
-      .then(res => console.log(res.data))
+      .then(res => dispatch(getPosts()))
       .catch(err => dispatch({ type: GET_POSTS, payload: err.response.data }));
   }
 };
