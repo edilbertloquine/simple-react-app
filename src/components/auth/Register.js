@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { registerUser } from '../../actions/authActions';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
 
 class Register extends Component {
   state = {
-    name: '',
-    email: '',
-    password: '',
-    password_confirm: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirm: "",
     errors: {}
   };
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push("/dashboard");
     }
   }
 
@@ -55,15 +55,19 @@ class Register extends Component {
               <div className="col-md-8 m-auto">
                 <h1 className="display-4 text-center">Sign Up</h1>
                 <p className="lead text-center">
-                  Create your DevConnector account
+                  Create your Posterify account
                 </p>
 
                 {Object.keys(errors).length > 0 ? (
                   <div className="row">
-                    <div className="col-md-12 alert alert-danger">error</div>
+                    <div className="col-md-12 alert alert-danger">
+                      {errors.map((error, i) => (
+                        <li key={i}>{error.msg}</li>
+                      ))}
+                    </div>
                   </div>
                 ) : (
-                  ''
+                  ""
                 )}
 
                 <form onSubmit={this.onSubmit}>

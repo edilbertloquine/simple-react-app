@@ -1,27 +1,27 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { loginUser } from '../../actions/authActions';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions/authActions";
 
 class Login extends Component {
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     errors: {}
   };
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push("/dashboard");
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push("/dashboard");
     }
 
-    if (nextProps.erros) {
+    if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
   }
@@ -45,7 +45,6 @@ class Login extends Component {
 
   render() {
     const { errors } = this.state;
-
     return (
       <div>
         <div className="login">
@@ -54,15 +53,21 @@ class Login extends Component {
               <div className="col-md-8 m-auto">
                 <h1 className="display-4 text-center">Log In</h1>
                 <p className="lead text-center">
-                  Sign in to your DevConnector account
+                  Sign in to your Posterify account
                 </p>
 
                 {Object.keys(errors).length > 0 ? (
                   <div className="row">
-                    <div className="col-md-12 alert alert-danger">error</div>
+                    <div className="col-md-12 alert alert-danger">
+                      {Object.keys(errors).length > 1 ? (
+                        errors.map((error, i) => <li key={i}>{error.msg}</li>)
+                      ) : (
+                        <li>{errors.message}</li>
+                      )}
+                    </div>
                   </div>
                 ) : (
-                  ''
+                  ""
                 )}
 
                 <form onSubmit={this.onSubmit}>

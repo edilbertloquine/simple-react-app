@@ -1,14 +1,13 @@
-import axios from 'axios';
-import setAuthToken from '../utils/setAuthToken';
-import jwt_decode from 'jwt-decode';
-import { GET_ERRORS, SET_CURRENT_USER } from './types';
+import axios from "axios";
+import setAuthToken from "../utils/setAuthToken";
+import jwt_decode from "jwt-decode";
+import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post('http://localhost:5000/api/users/create', userData)
-    .then(res => history.push('/login'))
+    .post("http://localhost:5000/api/users/create", userData)
+    .then(res => history.push("/login"))
     .catch(err => {
-      console.log(err.response.data);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -18,22 +17,23 @@ export const registerUser = (userData, history) => dispatch => {
 
 export const loginUser = userData => dispatch => {
   axios
-    .post('http://localhost:5000/api/auth/login', userData)
+    .post("http://localhost:5000/api/auth/login", userData)
     .then(res => {
       const { token } = res.data;
-      localStorage.setItem('jwtToken', token);
+      localStorage.setItem("jwtToken", token);
       setAuthToken(token);
 
       const decoded = jwt_decode(token);
 
       dispatch(setCurrentUser(decoded));
     })
-    .catch(err =>
+    .catch(err => {
+      console.log(err.response.data);
       dispatch({
         type: GET_ERRORS,
-        payload: err
-      })
-    );
+        payload: err.response.data
+      });
+    });
 };
 
 export const setCurrentUser = decoded => {
@@ -44,7 +44,7 @@ export const setCurrentUser = decoded => {
 };
 
 export const logoutUser = () => dispatch => {
-  localStorage.removeItem('jwtToken');
+  localStorage.removeItem("jwtToken");
   setAuthToken(false);
   dispatch(setCurrentUser({}));
 };

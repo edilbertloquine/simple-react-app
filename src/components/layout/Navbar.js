@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
+import { clearPosts } from '../../actions/postsActions';
 
 class Navbar extends Component {
   onLogoutClick = e => {
     e.preventDefault();
+    this.props.clearPosts();
     this.props.logoutUser();
   };
 
@@ -43,7 +45,7 @@ class Navbar extends Component {
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
           <div className="container">
             <Link className="navbar-brand" to="/">
-              DevConnector
+              Posterify
             </Link>
             <button
               className="navbar-toggler"
@@ -59,7 +61,7 @@ class Navbar extends Component {
                 <li className="nav-item">
                   <Link className="nav-link" to="/">
                     {' '}
-                    Developers
+                    Posts
                   </Link>
                 </li>
               </ul>
@@ -84,5 +86,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { logoutUser, clearPosts }
 )(Navbar);
