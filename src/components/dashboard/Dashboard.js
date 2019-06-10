@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getPosts, deletePost } from '../../actions/postsActions';
 
-// import Post from '../posts/Post';
+import Post from '../posts/Post';
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -37,27 +37,12 @@ class Dashboard extends Component {
                   <h4>Loading</h4>
                 ) : (
                   posts.map((post, index) => (
-                    <div key={index} className="col-md-8 col-md-offset-2 m-2">
-                      <div className="card">
-                        <div className="card-header">Author</div>
-                        <div className="card-body">
-                          <h3>{post.title}</h3>
-                          <p>{post.content}</p>
-                          <button
-                            onClick={() => this.onEditClick(post._id)}
-                            className="btn btn-primary text-white m-1"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => this.onDeleteClick(post._id)}
-                            className="btn btn-danger text-white m-1"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <Post
+                      key={index}
+                      post={post}
+                      onEditClick={() => this.onEditClick(post._id)}
+                      onDeleteClick={() => this.onDeleteClick(post._id)}
+                    />
                   ))
                 )}
               </div>
